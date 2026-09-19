@@ -78,7 +78,7 @@ export async function publishArticle(config, slug, options = {}) {
   try {
     let html = marked.parse(content);
     const plan = mediaPlan(frontmatter, content, location.articleDir, options.refreshThumbnail === true);
-    const mediaState = { ...(frontmatter.wp_media ?? {}) };
+    const mediaState = { ...frontmatter.wp_media };
     const uploadItems = [];
     let featuredMedia = Number(frontmatter.wp_media_id) || 0;
     for (const item of plan) {

@@ -7,7 +7,11 @@
     "wordpress-publisher": "bin/wordpress-publisher.js"
   },
   "exports": {
-    ".": "./src/index.js"
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./src/index.js",
+      "default": "./src/index.js"
+    }
   },
   "types": "./index.d.ts",
   "scripts": {

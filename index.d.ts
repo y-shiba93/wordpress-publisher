@@ -20,15 +20,28 @@ export interface PublishOptions {
   refreshThumbnail?: boolean;
 }
 
+export interface TermOption {
+  id: number;
+  name: string;
+  slug: string;
+  checked?: boolean;
+}
+
+export interface PublishResult {
+  result: { id: number; link: string; status: string; [key: string]: unknown };
+  updates: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
 export function loadConfig(configPath?: string): Promise<PublisherConfig>;
-export function publishArticle(config: PublisherConfig, slug: string, options?: PublishOptions): Promise<any>;
-export function fetchPost(config: PublisherConfig, endpoint: string, postId: number): Promise<any>;
-export function readArticle(filePath: string): { frontmatter: any; content: string };
-export function writeArticle(filePath: string, frontmatter: any, content: string): void;
+export function publishArticle(config: PublisherConfig, slug: string, options?: PublishOptions): Promise<PublishResult>;
+export function fetchPost(config: PublisherConfig, endpoint: string, postId: number): Promise<Record<string, unknown>>;
+export function readArticle(filePath: string): { frontmatter: Record<string, unknown>; content: string };
+export function writeArticle(filePath: string, frontmatter: Record<string, unknown>, content: string): void;
 export function updateArticle(filePath: string, updates: Record<string, unknown>): void;
 export function checkedTermIds(terms: unknown): number[];
-export function mergeTermOptions(remoteTerms: any[], currentTerms?: any[]): any[];
-export function fetchTaxonomy(config: PublisherConfig): Promise<any>;
-export function writeTaxonomyCache(config: PublisherConfig, taxonomy: any): string;
-export function applyTaxonomyToArticle(mdPath: string, taxonomy: any): void;
+export function mergeTermOptions(remoteTerms: TermOption[], currentTerms?: TermOption[]): TermOption[];
+export function fetchTaxonomy(config: PublisherConfig): Promise<{ syncedAt: string; categories: TermOption[]; tags: TermOption[] }>;
+export function writeTaxonomyCache(config: PublisherConfig, taxonomy: unknown): string;
+export function applyTaxonomyToArticle(mdPath: string, taxonomy: { categories: TermOption[]; tags: TermOption[] }): void;
 export function articlePaths(config: PublisherConfig, slug?: string): string[];

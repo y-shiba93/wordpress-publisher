@@ -26,7 +26,7 @@ export class RestClient {
   async request(pathname, options = {}) {
     const response = await fetch(`${this.baseUrl}${pathname}`, {
       ...options,
-      headers: { Authorization: this.authorization, ...(options.headers ?? {}) },
+      headers: { Authorization: this.authorization, ...options.headers },
     });
     return responseJson(response);
   }

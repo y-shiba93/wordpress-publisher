@@ -27,7 +27,7 @@ export async function loadConfig(configPath = 'wordpress-publisher.config.json')
   const config = {
     ...DEFAULTS,
     ...raw,
-    transport: { ...DEFAULTS.transport, ...(raw.transport ?? {}) },
+    transport: { ...DEFAULTS.transport, ...raw.transport },
     rootDir,
     configPath: absolute,
   };
