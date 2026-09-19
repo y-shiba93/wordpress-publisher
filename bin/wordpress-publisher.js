@@ -29,6 +29,7 @@ function parse(argv) {
   const values = { _: [] };
   for (let index = 0; index < argv.length; index += 1) {
     const value = argv[index];
+    if (value === '--') continue;
     if (!value.startsWith('--')) { values._.push(value); continue; }
     const key = value.slice(2);
     if (['publish', 'refresh-thumbnail', 'all', 'force'].includes(key)) values[key] = true;
