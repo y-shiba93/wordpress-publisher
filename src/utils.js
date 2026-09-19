@@ -3,7 +3,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 export function today() {
-  return new Date().toISOString().slice(0, 10);
+  const now = new Date();
+  return [now.getFullYear(), now.getMonth() + 1, now.getDate()]
+    .map((value, index) => index === 0 ? String(value) : String(value).padStart(2, '0'))
+    .join('-');
 }
 
 export function assertSlug(slug) {
