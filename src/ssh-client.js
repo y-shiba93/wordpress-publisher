@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { randomUUID } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { shellQuote } from './utils.js';
@@ -18,6 +19,7 @@ function run(command, args, options = {}) {
 export class SshClient {
   constructor(config) {
     this.transport = config.transport;
+    this.siteUrl = config.siteUrl.replace(/\/$/, '');
     this.host = this.transport.host;
     this.wpRoot = this.transport.wordpressRoot;
     this.wpUser = String(this.transport.wpCliUser ?? 1);
@@ -32,11 +34,15 @@ export class SshClient {
   }
 
   withRelease(operation, payload, files = []) {
-    const releaseId = `${new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z')}-${process.pid}`;
+    const releaseId = `${new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z')}-${randomUUID().slice(0, 8)}`;
     const remoteDir = `${this.releaseRoot.replace(/\/$/, '')}/${releaseId}`;
     const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'wordpress-publisher-'));
     const payloadPath = path.join(tempDir, 'payload.json');
-    fs.writeFileSync(payloadPath, `${JSON.stringify(payload)}\n`, { mode: 0o600 });
+    fs.writeFileSync(payloadPath, `${JSON.stringify({
+      ...payload,
+      expectedSiteUrl: this.siteUrl,
+      expectedWordpressRoot: this.wpRoot,
+    })}\n`, { mode: 0o600 });
     const remoteCommand = (command) => this.ssh(command);
     try {
       remoteCommand(`umask 077; mkdir -p ${shellQuote(remoteDir)}`);

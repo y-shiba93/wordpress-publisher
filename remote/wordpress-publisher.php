@@ -35,6 +35,15 @@ $base = $args[1] ?? '';
 try {
     [$base, $payload] = publisher_payload($base);
     if (is_multisite()) { throw new RuntimeException('Multisite is not supported'); }
+    $expected_root = rtrim((string)($payload['expectedWordpressRoot'] ?? ''), '/');
+    $expected_url = untrailingslashit((string)($payload['expectedSiteUrl'] ?? ''));
+    if (!$expected_root || rtrim((string)realpath(ABSPATH), '/') !== $expected_root) {
+        throw new RuntimeException('WordPress installation mismatch');
+    }
+    if (!$expected_url || untrailingslashit(home_url()) !== $expected_url) {
+        throw new RuntimeException('WordPress site URL mismatch');
+    }
+    if (!current_user_can('edit_posts')) { throw new RuntimeException('Insufficient publishing capability'); }
     if ($operation === 'taxonomy') {
         $taxonomy = $payload['taxonomy'] ?? '';
         if (!in_array($taxonomy, ['categories','tags'], true)) { throw new RuntimeException('Invalid taxonomy'); }
