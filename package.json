@@ -1,0 +1,25 @@
+{
+  "name": "@kuro-shiba/wordpress-publisher",
+  "version": "1.0.0",
+  "description": "Repository-independent Markdown to WordPress publisher",
+  "type": "module",
+  "bin": {
+    "wordpress-publisher": "bin/wordpress-publisher.js"
+  },
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "types": "./index.d.ts",
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check bin/wordpress-publisher.js && node --check src/*.js && node --test"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "marked": "^18.0.0"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "MIT"
+}

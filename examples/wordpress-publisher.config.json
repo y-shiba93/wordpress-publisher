@@ -1,0 +1,15 @@
+{
+  "siteUrl": "https://example.com",
+  "contentDir": "articles",
+  "entryFile": "index.md",
+  "taxonomyCache": ".wordpress/taxonomy.json",
+  "postType": "posts",
+  "defaultPostStatus": "draft",
+  "transport": {
+    "type": "ssh",
+    "host": "xserver_me",
+    "wordpressRoot": "/home/example/example.com/public_html",
+    "wpCliUser": 1,
+    "releaseRoot": "/home/example/.wordpress-publisher"
+  }
+}
